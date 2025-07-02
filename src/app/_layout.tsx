@@ -1,14 +1,23 @@
+import Colors from "@/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import "react-native-reanimated";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect } from "react";
 
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
+
+import AntDesign from "@expo/vector-icons/AntDesign";
+
+const CLERK_PUBLISHED_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary
+  ErrorBoundary,
 } from "expo-router";
 
 // export const unstable_settings = {
@@ -19,7 +28,8 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function InitialLayout() {
+  const { isLoaded, isSignedIn } = useAuth();
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -40,14 +50,85 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
+  useEffect(() => {
+    console.log("isSignedIn", isSignedIn);
+  }, [isSignedIn]);
 
   return (
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-      </Stack>
+    <Stack
+      screenOptions={{
+        headerLeft: () => (
+          <Link href="/" dismissTo asChild>
+            <AntDesign name="left" size={32} color={Colors.dark} />
+          </Link>
+        ),
+      }}
+    >
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="signup"
+        options={{
+          title: "",
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
+          headerLeft: () => (
+            <Link href="/" dismissTo asChild>
+              <AntDesign name="left" size={32} color={Colors.dark} />
+            </Link>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="verify/[phoneNumber]"
+        options={{
+          title: "",
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
+          headerLeft: () => (
+            <Link href="/" dismissTo asChild>
+              <AntDesign name="left" size={32} color={Colors.dark} />
+            </Link>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="login"
+        options={{
+          title: "",
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
+          headerLeft: () => (
+            <Link href="/" dismissTo asChild>
+              <AntDesign name="left" size={32} color={Colors.dark} />
+            </Link>
+          ),
+          headerRight: () => (
+            <Link href="/help" asChild>
+              <MaterialIcons name="help-outline" size={32} color="black" />
+            </Link>
+          ),
+        }}
+      />
+
+      <Stack.Screen name="help" options={{ presentation: "modal" }} />
+    </Stack>
+  );
+}
+
+export default function RootLayoutNav() {
+  return (
+    <>
+      <StatusBar style="dark" />
+
+      <ClerkProvider
+        tokenCache={tokenCache}
+        publishableKey={CLERK_PUBLISHED_KEY}
+      >
+        <InitialLayout />
+      </ClerkProvider>
+    </>
   );
 }
