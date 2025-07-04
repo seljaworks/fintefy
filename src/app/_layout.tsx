@@ -2,7 +2,7 @@ import Colors from "@/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useFonts } from "expo-font";
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
@@ -20,16 +20,19 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
-// export const unstable_settings = {
-//   // Ensure that reloading on `/modal` keeps a back button present.
-//   initialRouteName: "(tabs)",
-// };
+export const unstable_settings = {
+  // Ensure that reloading on `/modal` keeps a back button present.
+  initialRouteName: "/(authenticated)/(tabs)/home",
+};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 function InitialLayout() {
   const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
+
+  const segments = useSegments();
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -41,17 +44,24 @@ function InitialLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded || !isLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+  }, [loaded, isLoaded]);
 
   useEffect(() => {
-    console.log("isSignedIn", isSignedIn);
+    if (!isLoaded) return;
+
+    const isInAuthGroup = segments[0] === "(authenticated)";
+
+    //TODO: ganti indexnya jadi halaman home biar ngak muncul halaman login pas startup
+
+    //jika sudah login dan masih ada di luar auth groups
+    if (isSignedIn && !isInAuthGroup) {
+      router.replace("/(authenticated)/(tabs)/home");
+    } else {
+      router.replace("/");
+    }
   }, [isSignedIn]);
 
   return (
@@ -114,6 +124,10 @@ function InitialLayout() {
       />
 
       <Stack.Screen name="help" options={{ presentation: "modal" }} />
+      <Stack.Screen
+        name="(authenticated)/(tabs)"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

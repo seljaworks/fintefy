@@ -9,7 +9,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "rebuilt apk": "npx expo prebuild --clean --platform android",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "postinstall": "npx patch-package"
   },
   "jest": {
     "preset": "jest-expo"
@@ -17,6 +18,7 @@
   "dependencies": {
     "@clerk/clerk-expo": "^2.14.1",
     "@expo/vector-icons": "^14.1.0",
+    "@react-native-menu/menu": "^1.2.2",
     "@react-navigation/native": "^7.1.6",
     "expo": "~53.0.13",
     "expo-asset": "~11.1.5",
@@ -35,10 +37,13 @@
     "react-native": "0.79.4",
     "react-native-confirmation-code-field": "^8.0.1",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-ios-context-menu": "^3.1.0",
+    "react-native-ios-utilities": "^5.1.2",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-web": "~0.20.0",
+    "zeego": "^3.0.6",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
