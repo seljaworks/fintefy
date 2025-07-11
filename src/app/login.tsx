@@ -43,7 +43,7 @@ const Page = () => {
       switch (type) {
         case LogInType.PhoneNumber:
           await handlePhoneNumberLogin(signIn, fullPhoneNumber);
-          router.push({
+          router.replace({
             pathname: "/verify/[phoneNumber]",
             params: { phoneNumber: fullPhoneNumber, isSignInString: "true" },
           });
