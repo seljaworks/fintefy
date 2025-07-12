@@ -1,17 +1,24 @@
 import DropdownCircleButton from "@/components/DropdownCircleButton";
 import RoundedBtn from "@/components/RoundedBtn";
+import WidgetList from "@/components/SortableList/WidgetList";
 import Colors from "@/constants/Colors";
 import { defaultStyles } from "@/constants/Styles";
 import { useBalanceStore } from "@/store/balanceStore";
 import { Ionicons } from "@expo/vector-icons";
+import { useHeaderHeight } from "@react-navigation/elements";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 const Page = () => {
   const { addTransaction, totalBalance, transactions, clearTransaction } =
     useBalanceStore();
+
+  const headerHeight = useHeaderHeight();
   return (
-    <ScrollView style={{ backgroundColor: Colors.background }}>
+    <ScrollView
+      style={{ backgroundColor: Colors.background }}
+      contentContainerStyle={{ paddingTop: headerHeight }}
+    >
       <View style={styles.account}>
         <View style={styles.row}>
           <Text style={styles.balanceText}>{totalBalance()}</Text>
@@ -45,7 +52,7 @@ const Page = () => {
       <Text style={defaultStyles.sectionHeader}>Latest Transactions</Text>
       <View style={styles.transactions}>
         {transactions.length === 0 && (
-          <Text style={styles.transactions}>No Transaction yet</Text>
+          <Text style={{ padding: 16 }}>No Transaction yet</Text>
         )}
         {transactions
           .reverse()
@@ -69,6 +76,8 @@ const Page = () => {
             </View>
           ))}
       </View>
+      <Text style={defaultStyles.sectionHeader}>Widgets</Text>
+      <WidgetList />
     </ScrollView>
   );
 };
@@ -76,7 +85,7 @@ const Page = () => {
 export default Page;
 
 const styles = StyleSheet.create({
-  account: { margin: 80, alignItems: "center" },
+  account: { margin: 40, alignItems: "center" },
   row: {
     flexDirection: "row",
     alignItems: "flex-end",
@@ -94,6 +103,7 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: 4,
     borderRadius: 10,
+    marginBottom: 8,
   },
   circle: {
     backgroundColor: Colors.lightGray,
