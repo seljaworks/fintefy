@@ -40,7 +40,7 @@ interface Urls {
   source_code: string[];
   announcement: any[];
 }
-export interface ListingResponse {
+export interface ListingItem {
   id: number;
   name: string;
   symbol: string;

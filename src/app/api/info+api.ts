@@ -7,26 +7,25 @@ export async function GET(request: Request) {
 
   const id = url.searchParams.get("id");
   try {
-    // const response = await fetch(
-    //   `https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=${id}`,
-    //   {
-    //     headers: {
-    //       "X-CMC_PRO_API_KEY": COINMARKETCAP_API_KEY,
-    //     },
-    //   }
-    // );
+    const response = await fetch(
+      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=${id}`,
+      {
+        headers: {
+          "X-CMC_PRO_API_KEY": COINMARKETCAP_API_KEY,
+        },
+      }
+    );
 
-    const res = result;
+    const res = await response.json();
 
-    return Response.json({
-      result: res,
-    });
+    return Response.json(res.data);
   } catch (ex) {
     return Response.json({
       error: "Error when fetching the data",
     });
   }
 }
+
 const result: InfoResponse = {
   "1": {
     id: 1,

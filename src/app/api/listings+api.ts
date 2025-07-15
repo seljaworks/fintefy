@@ -1,4 +1,4 @@
-import { ListingResponse } from "@/constants/types";
+import { ListingItem } from "@/constants/types";
 
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY!;
 
@@ -20,9 +20,7 @@ export async function GET(request: Request) {
 
     const res = result;
 
-    return Response.json({
-      result: res,
-    });
+    return Response.json(res);
   } catch (ex) {
     return Response.json({
       error: "Error when fetching the data",
@@ -30,7 +28,7 @@ export async function GET(request: Request) {
   }
 }
 
-const result: ListingResponse[] = [
+const result: ListingItem[] = [
   {
     id: 1,
     name: "Bitcoin",

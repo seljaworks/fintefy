@@ -46,15 +46,11 @@ const Page = () => {
 
   const verifySignUp = async () => {
     try {
-      console.log("code:", code);
-
       await signUp?.attemptPhoneNumberVerification({
         code,
       });
 
       await setActive!({ session: signUp?.createdSessionId });
-
-      console.log("sessionId:", signUp?.createdSessionId);
     } catch (error) {
       if (error instanceof Error) {
         alert(`Verification failed: ${error.message}`);

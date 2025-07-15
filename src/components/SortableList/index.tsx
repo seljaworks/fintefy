@@ -5,16 +5,20 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import Item from "./Item";
 import { COL, Positions, SIZE } from "./Config";
+import Item from "./Item";
 
 interface ListProps {
   children: ReactElement<{ id: string }>[];
   editing: boolean;
-  onDragEnd: (diff: Positions) => void;
+  onDragEnd?: (diff: Positions) => void;
 }
 
-const SortableList = ({ children, editing, onDragEnd }: ListProps) => {
+const SortableList = ({
+  children,
+  editing,
+  onDragEnd = () => {},
+}: ListProps) => {
   const scrollY = useSharedValue(0);
   const scrollView = useAnimatedRef<Animated.ScrollView>();
   const positions = useSharedValue<Positions>(

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { View } from "react-native";
 import SortableList from ".";
 import { MARGIN } from "./Config";
 import Tile from "./Tile";
@@ -23,18 +23,13 @@ const tiles = [
 
 const WidgetList = () => {
   return (
-    <GestureHandlerRootView style={{ paddingHorizontal: MARGIN }}>
-      <SortableList
-        editing={true}
-        onDragEnd={(positions) =>
-          console.log(JSON.stringify(positions, null, 2))
-        }
-      >
+    <View style={{ paddingHorizontal: MARGIN }}>
+      <SortableList editing={true} onDragEnd={() => {}}>
         {[...tiles].map((tile, index) => (
           <Tile onLongPress={() => true} key={tile.id} id={tile.id} />
         ))}
       </SortableList>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 
